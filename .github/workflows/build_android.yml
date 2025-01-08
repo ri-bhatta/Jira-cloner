@@ -25,7 +25,8 @@ jobs:
 
     - name: Generate buildozer.spec
       run: |
-        echo "title = MyApp" > buildozer.spec
+        echo "[app]" > buildozer.spec
+        echo "title = MyApp" >> buildozer.spec
         echo "package.name = myapp" >> buildozer.spec
         echo "package.domain = org.example" >> buildozer.spec
         echo "source.dir = ." >> buildozer.spec
