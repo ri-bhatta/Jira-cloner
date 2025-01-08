@@ -37,19 +37,13 @@ jobs:
         echo "android.minapi = 21" >> buildozer.spec
         echo "orientation = portrait" >> buildozer.spec
 
-    - name: Download and Install NDK with Retry
+    - name: Download and Install Pre-Downloaded NDK
       run: |
         mkdir -p ~/.buildozer/android/platform
         cd ~/.buildozer/android/platform
-        for i in {1..10}; do
-          wget -q https://dl.google.com/android/repository/android-ndk-r21.4.7075529-linux-x86_64.zip -O ndk.zip && break || sleep 25
-        done
-        if [ ! -f "ndk.zip" ]; then
-          echo "NDK download failed after 10 attempts."
-          exit 1
-        fi
-        unzip ndk.zip || { echo "Failed to unzip NDK."; exit 1; }
-        mv android-ndk-r21.4 ~/.buildozer/android/platform/android-ndk-r21.4
+        wget -q https://github.com/android/ndk/releases/download/r21e/android-ndk-r21e-linux-x86_64.zip -O ndk.zip
+        unzip ndk.zip
+        mv android-ndk-r21e ~/.buildozer/android/platform/android-ndk-r21e
 
     - name: Set Up Buildozer Environment
       run: |
