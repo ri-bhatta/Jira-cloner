@@ -20,7 +20,7 @@ jobs:
         sudo apt install -y python3 python3-pip build-essential libssl-dev libffi-dev python3-dev \
                             liblzma-dev libsqlite3-dev libgdbm-dev libbz2-dev \
                             zlib1g-dev libreadline-dev libffi-dev libffi8 libgdbm-compat-dev \
-                            openjdk-11-jdk unzip
+                            openjdk-11-jdk unzip wget tar
         pip install --upgrade pip setuptools cython buildozer
 
     - name: Generate buildozer.spec
@@ -35,9 +35,15 @@ jobs:
         echo "requirements = kivy" >> buildozer.spec
         echo "android.api = 29" >> buildozer.spec
         echo "android.minapi = 21" >> buildozer.spec
-        echo "android.sdk = 30.0.3" >> buildozer.spec
-        echo "android.ndk = 21.4.7075529" >> buildozer.spec
         echo "orientation = portrait" >> buildozer.spec
+
+    - name: Download and Install NDK Manually
+      run: |
+        mkdir -p ~/.buildozer/android/platform
+        cd ~/.buildozer/android/platform
+        wget -q https://dl.google.com/android/repository/android-ndk-r21.4.7075529-linux-x86_64.zip -O ndk.zip
+        unzip ndk.zip
+        mv android-ndk-r21.4 ~/.buildozer/android/platform/android-ndk-r21.4
 
     - name: Set Up Buildozer Environment
       run: |
@@ -49,7 +55,7 @@ jobs:
         mv ~/.buildozer/android/platform/android-sdk/cmdline-tools-tools ~/.buildozer/android/platform/android-sdk/cmdline-tools/latest
         yes | ~/.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses
         ~/.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin/sdkmanager \
-            "platform-tools" "platforms;android-29" "build-tools;30.0.3" "ndk;21.4.7075529"
+            "platform-tools" "platforms;android-29" "build-tools;30.0.3"
 
     - name: Build APK
       run: buildozer -v android debug
