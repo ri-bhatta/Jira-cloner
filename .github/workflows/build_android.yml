@@ -31,6 +31,7 @@ jobs:
         echo "package.domain = org.example" >> buildozer.spec
         echo "source.dir = ." >> buildozer.spec
         echo "source.include_exts = py,kv,json" >> buildozer.spec
+        echo "version = 1.0.0" >> buildozer.spec
         echo "requirements = kivy" >> buildozer.spec
         echo "android.api = 29" >> buildozer.spec
         echo "android.minapi = 21" >> buildozer.spec
