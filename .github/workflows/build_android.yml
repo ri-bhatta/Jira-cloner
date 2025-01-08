@@ -37,18 +37,26 @@ jobs:
         echo "android.minapi = 21" >> buildozer.spec
         echo "orientation = portrait" >> buildozer.spec
 
-    - name: Download and Install NDK with Verification
+    - name: Download and Verify NDK
       run: |
         mkdir -p ~/.buildozer/android/platform
         cd ~/.buildozer/android/platform
+
+        # Download NDK with retries
         for i in {1..3}; do
           curl -L -o ndk.zip https://github.com/android/ndk/releases/download/r21e/android-ndk-r21e-linux-x86_64.zip && break || sleep 5
         done
-        if [ ! -f "ndk.zip" ]; then
-          echo "NDK download failed after 3 attempts."
+
+        # Validate SHA256 checksum
+        echo "dbcf9c536482b0f3997dfb8424d34866548c0249e47a4cd8c9243fc49a2205a3  ndk.zip" | sha256sum -c -
+
+        # If checksum fails, exit
+        if [ $? -ne 0 ]; then
+          echo "NDK ZIP file checksum validation failed."
           exit 1
         fi
-        unzip -t ndk.zip || { echo "NDK ZIP file is corrupted."; exit 1; }
+
+        # Extract the NDK
         unzip ndk.zip
         mv android-ndk-r21e ~/.buildozer/android/platform/android-ndk-r21e
 
