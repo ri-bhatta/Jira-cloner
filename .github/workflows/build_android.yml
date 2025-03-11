@@ -60,7 +60,7 @@ jobs:
         unzip ndk.zip
         mv android-ndk-r21e ~/.buildozer/android/platform/android-ndk-r21e
 
-    - name: Set Up Buildozer Environment
+    - name: Set Up Buildozer Environment for the app
       run: |
         mkdir -p ~/.buildozer/android/platform/android-sdk
         wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O cmdline-tools.zip
